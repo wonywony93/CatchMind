@@ -1,7 +1,5 @@
 package chat.server;
 
-
-
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -13,6 +11,7 @@ import javax.swing.text.StyledEditorKit.ForegroundAction;
 import chat.client.CanvasDemo;
 
 public class Server {
+	
 	int i=1;
 	int sum=0;
 	int count=1;
@@ -23,7 +22,7 @@ public class Server {
 	Vector nickV = new Vector();
 	StringBuffer sb = new StringBuffer();
 	ObjectOutputStream oos;
-	
+	String answer;
 	 public void go(){ 
 		   
 		      try{  
@@ -63,7 +62,8 @@ public class Server {
 	 } //removeThread end..
 
 	 
-	//broadCasting 시작
+	//클라이언트들에게 메세지 뿌리기
+	 
 	 public void broadCasting(String str){          
 		 for(int i=0;i<v.size();i++){//vecter의 사이즈 만큼
 			 ServerThread std=(ServerThread)v.elementAt(i); //서버스레드 객체 생성하고
@@ -93,7 +93,6 @@ public class Server {
 				sb.setLength(0);
 	   }
 	  }
-
 	  
 	  public void addNameVector(String str) {
 	      nickV.add(str);
@@ -101,17 +100,16 @@ public class Server {
 	  
 	  public void deleteNameVector(String name){
 		  nickV.remove(name);
-		  
-
 	  }
 	  
-	  public void sendRight2(int num) //1번이 나갔으면
+	  
+	  //방장권한 넘기기 (첫번째 클라이언트가 나가면 다음 클라이언트에게 방장 부여)
+	  public void sendRight2(int num) 
 	  {
 		  ServerThread std;
 		  ServerThread std2;
 
-
-		  if(num==i) {
+		  if(num==i) { 
 			   i++;
 			   System.out.println(nickV.get(0));
 			   nickV.remove(0);
@@ -135,10 +133,12 @@ public class Server {
 		  }
 	  }
 	  
-	  //권한 부여하기(내번호 보내기)-----
+	  //20180419
+	  //권한 부여하기(내번호 보내기+점수보내기)-----
 	  public void sendRight(ServerThread st) {
-		  
+		  //내번호!점수
 		  st.sendMessage("@aty"+sum);
+		  
 	  }
 	
 	  public static void main(String[] args){ //main start..

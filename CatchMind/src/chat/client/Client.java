@@ -32,6 +32,9 @@ import javax.swing.JLabel;
 public class Client {
 
 	ArrayList<String> nameList=new ArrayList<String>();
+	ArrayList<String> rankList=new ArrayList<String>();
+	
+	
 	private int number=0;
 	private ObjectInputStream ois;
 	private String an,msg;
@@ -286,7 +289,6 @@ public class Client {
 			System.out.println("Client  입니다...");
 			
 			s1=new Socket(server,4500);
-
 			
 			ClientThread ct=new ClientThread(s1,this);//1부터시작
 			addThread(ct);
@@ -297,7 +299,6 @@ public class Client {
 			oos.writeObject(name);
 			oos.flush();
 			
-
 		} //try end..
 
 		catch(IOException e){   
@@ -328,13 +329,11 @@ public class Client {
 		}
 		for (int i = 0; i < li.length; i++) {
 			if(name.equals(li[i])){
-				System.out.println(li[i]+"같음");
 				ul.remove("<방장>"+name);
 				break;
 			}
 			else
 			{
-				System.out.println("다름");
 				ul.remove(name);
 				break;
 			}
@@ -367,17 +366,31 @@ public class Client {
 		
 	}
 
-	//등수에 이름 넣기
-	public void addScoreNumber(String name){
-		rank.add(name+"("+score+"점)");
+	//-------------점수부여
+	public void setScore(int myScore){
+		score=myScore;
+	}
+	
+	//점수 변경
+	public void updateScore(){
 		
 	}
 	
-	//점수 추가
-	public void addScore(String name){
+	//등수에 이름 넣기
+	public void addScoreNumber(String name){
+		
+		if(name.indexOf("<방장>")!=0)
+		{
+			rank.add(name+"("+score+"점)");
+			rankList.add(name+"("+score+"점)");
+		}
 	}
 	
-	
+	//점수 추가
+	public void addScore(String name,int score){
+		chatA.append(name+"님 ("+score+")점\n");
+		
+	}
 	
 	//그리기 이벤트
 	//실시간으로 보내줘야함
@@ -539,9 +552,6 @@ public class Client {
 		}
 	}
 
-	
-	
-	
 	 public CanvasDemo getCd() {
 		return cd;
 	}

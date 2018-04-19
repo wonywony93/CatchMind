@@ -12,9 +12,8 @@ import chat.server.Server;
 
 public class ClientThread extends Thread {
 
-	
-	
 		ArrayList<String> nl=new ArrayList<String>();
+		int myScore=0;
 		int myNumber=0;
 		String head;
 		Server server;
@@ -49,15 +48,24 @@ public class ClientThread extends Thread {
 	        	String str2="";
 	        	obj=ois.readObject();
 	        	
-	        
 	        	str2=(String)obj;
+	        	
+	        	//접속한 사람들 이름 추가
 	            if(str2.indexOf("!@#") == 0){
 	            	name=str2.substring(3);
 	            	client.addName(name);
+	            	client.setScore(myScore);
 	            	client.addScoreNumber(name);
 	            	nl.add(name);
 	            }
-	            else if(str2.indexOf("<방장>")==0)//방장권한
+	            //---score 설정
+	            else if(str2.indexOf("@점수")==0){
+	            	String temp=str2.substring(3);
+	            	myScore=Integer.parseInt(temp);
+	            	client.setScore(myScore);
+	            }
+	            //첫번째 방에 들어온 사람 방장권한
+	            else if(str2.indexOf("<방장>")==0)
 	            {
 	            	
 	            	name=str2.substring(4);
@@ -65,35 +73,49 @@ public class ClientThread extends Thread {
 	            	client.settingRight();
 	            	nl.add(str2.substring(4));
 	            }
+	            //방장이 나간 후 방장 권한 위임
 	            else if(str2.indexOf("@@방장")==0)
 	            {
 	            	
 //	            	client.updateName(nl.get(0));
 	            	client.updateName(str2.substring(4)+nl.get(0));
-	            	client.settingRight();//방장권한 위임됐으면 다른 클라이언트들한테도 뿌려줘야함 7:49
+	            	client.settingRight();
 	            	
 	            }
+	            //방장권한 바뀐 후에 리스트 이름 갱신
 	            else if(str2.indexOf("@@up")==0)
 	            {
 	            	String e=str2.substring(4);
 	            	client.updateName(e);
 	            }
 
-	            
-	            else if(str2.indexOf("@aty")==0) //권한받기
+	            //각자의 번호 받기 
+	            else if(str2.indexOf("@aty")==0)
 	            {
 	            	String tmp=str2.substring(4);
+	            	
 	            	myNumber=Integer.parseInt(tmp);
 	            	client.setNumber(myNumber);
 	            }
 	            
+	            //정답불러오기
 	            else if(str2.indexOf("/정답")==0)
 	            {
-	            	//점수도 같이 보내줘야함
 	            	String tmp=str2.substring(3);//정답
+	            	System.out.println(tmp);
 	            	client.answer(tmp);//answer
 	            }
-	            
+	            //점수맞췄을 때 점수추가하기...
+	            else if(str2.indexOf("@등수")==0)
+	            {
+	            	String tmp=str2.substring(3);
+	            	String[] temp=tmp.split(",");
+	            	String n1=temp[0];
+	            	int score=Integer.parseInt(temp[1]);
+	            	client.addScore(n1, score);
+	            	
+	            	
+	            }
 	            
 	            else if(str2.indexOf("@~1")==0){//좌표
 	            	
@@ -118,7 +140,6 @@ public class ClientThread extends Thread {
 
 	            }
 
-	            
 	            
 	            else if(str2.indexOf("나감")==0){ 
 	            	String str3=str2.substring(2);
@@ -190,7 +211,6 @@ public class ClientThread extends Thread {
     		cd.color=Color.WHITE;
     		break;
 		}
-		
 		
 		cd1.repaint();
 		

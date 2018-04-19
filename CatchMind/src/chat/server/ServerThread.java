@@ -24,9 +24,10 @@ public class ServerThread extends Thread{
 		CanvasDemo cd;
 		int cnt=0;
 		String[] an = {"코끼리","사자","퇴학","한가인","아이폰","장조림","돈까스","배그",
-				"오버워치","롤","비트캠프","코난","포켓몬스터","서강대","정혜원","나무",};
+				"오버워치","롤","비트캠프","코난","포켓몬스터","서강대","미키마우스","나무","컴퓨터"};
 		
-		int su = (int)(Math.random()*16);
+		int su = (int)(Math.random()*17);
+
 		
 		public ServerThread(Server ss,Socket s1){    
 			this.server=ss;
@@ -67,17 +68,20 @@ public class ServerThread extends Thread{
 						server.broadCasting("<방장>"+name);
 						server.broadCastingName(this);
 						server.addNameVector("<방장>"+name); //<방장>
+						server.answer=an[su];
 					}
 
 					else {
 						
 					server.broadCasting("!@#"+name);
+					server.broadCasting("@점수"+score);
 					server.broadCastingName(this);
 					server.addNameVector(name);
 					}
 					
 					server.broadCasting("["+name+"]"+"님이 입장하셨습니다...");
-					server.broadCasting("/정답"+an[su]);
+					
+					server.broadCasting("/정답"+server.answer);
 					}
 					
 					
@@ -103,16 +107,21 @@ public class ServerThread extends Thread{
 						}
 						
 						else{
-							if(str.equals(an[su])) {
+
+							if(str.equals(server.answer)) { //정답을 맞췄을 때
+								
 								server.broadCasting("*************************************************"); //Server에 BroadCasting
 								server.broadCasting("*********"+name+"님이 >> "+str+" << 정답입니다***********"); //Server에 BroadCasting
 								server.broadCasting("*************************************************"); //Server에 BroadCasting
 								su=(int)(Math.random()*16);
-								server.broadCasting("/정답"+an[su]);
+								server.answer=an[su];
+								server.broadCasting("/정답"+server.answer);
+								score+=20;
+								server.broadCasting("@등수"+name+","+score);
+								
 							}
-
-							else {	
-								server.broadCasting(""+name+">"+str); //Server에 BroadCasting
+							else{
+							server.broadCasting(""+name+">"+str); //Server에 BroadCasting
 							}
 						}
 					} //while end..
@@ -126,6 +135,10 @@ public class ServerThread extends Thread{
 				server.broadCasting("나감"+name);  
 				System.out.println("나간번호"+clientNum);
 				server.sendRight2(clientNum);
+				if(server.v.isEmpty())
+				{
+					server.sum=0;
+				}
 				System.out.println(s1.getInetAddress()+"서버 접속 중지...");  //서버모드에 찍히는 message
 			} //catch
 			catch (ClassNotFoundException e) {
@@ -144,8 +157,6 @@ public class ServerThread extends Thread{
 			}
 		   } //sendMessage
 
-
-		
 		
 
 }
