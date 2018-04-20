@@ -74,7 +74,7 @@ public class ServerThread extends Thread{
 					else {
 						
 					server.broadCasting("!@#"+name);
-					server.broadCasting("@점수"+score);
+					server.broadCasting("@점수"+score);//점수 기본값 보내기
 					server.broadCastingName(this);
 					server.addNameVector(name);
 					}

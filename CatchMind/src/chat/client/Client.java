@@ -32,7 +32,8 @@ import javax.swing.JLabel;
 public class Client {
 
 	ArrayList<String> nameList=new ArrayList<String>();
-	ArrayList<String> rankList=new ArrayList<String>();
+	ArrayList<Integer> scoreList=new ArrayList<Integer>();
+	int i=1;
 	
 	
 	private int number=0;
@@ -172,6 +173,7 @@ public class Client {
 			};
 			//Color버튼생성 
 			optionP.add(p1);
+			
 			black.setBackground(Color.black);
 			orange.setBackground(Color.orange);			
 			green.setBackground(Color.green);
@@ -216,7 +218,7 @@ public class Client {
 			listP.setLayout(new BorderLayout());
 			listP.add(user,BorderLayout.NORTH);
 			listP.add(ul,BorderLayout.CENTER);
-			Label rank1=new Label("<등수>");
+			Label rank1=new Label("<점수>");
 
 			Panel tP=new Panel(new BorderLayout());//tempPanel
 			tP.add(rank1,BorderLayout.NORTH);
@@ -318,7 +320,6 @@ public class Client {
 	
 	//---------리스트에 이름 삭제하기-----------
 	public void deleteName(String name){
-		//deleteName에 문제가 있음 <방장>name이기때문에 name을 찾지 못하고 있음
 
 		String[] li=ul.getItems();
 		for (int i = 0; i < li.length; i++) {
@@ -374,6 +375,8 @@ public class Client {
 	//점수 변경
 	public void updateScore(){
 		
+		
+		
 	}
 	
 	//등수에 이름 넣기
@@ -381,16 +384,24 @@ public class Client {
 		
 		if(name.indexOf("<방장>")!=0)
 		{
-			rank.add(name+"("+score+"점)");
-			rankList.add(name+"("+score+"점)");
+			rank.add(name+"("+score+")점");
+			scoreList.add(score);
 		}
 	}
 	
 	//점수 추가
 	public void addScore(String name,int score){
-		chatA.append(name+"님 ("+score+")점\n");
+		
+		rank.remove(name+"("+(score-20)+")점");
+		rank.add(name+"("+score+")점");
 		
 	}
+	
+	public void removeRank(String name)
+	{
+			rank.remove(name+"("+score+")점");
+	}
+	
 	
 	//그리기 이벤트
 	//실시간으로 보내줘야함
@@ -544,7 +555,7 @@ public class Client {
 		number=n;
 		
 		try {
-			oos.writeObject("@num"+number); ///@num이 안먹고 있음
+			oos.writeObject("@num"+number); 
 			oos.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -13,6 +13,9 @@ import chat.server.Server;
 public class ClientThread extends Thread {
 
 		ArrayList<String> nl=new ArrayList<String>();
+		ArrayList<User> ul=new ArrayList<User>();
+		
+		
 		int myScore=0;
 		int myNumber=0;
 		String head;
@@ -58,12 +61,14 @@ public class ClientThread extends Thread {
 	            	client.addScoreNumber(name);
 	            	nl.add(name);
 	            }
+	            
 	            //---score 설정
 	            else if(str2.indexOf("@점수")==0){
 	            	String temp=str2.substring(3);
 	            	myScore=Integer.parseInt(temp);
-	            	client.setScore(myScore);
+	            	client.setScore(myScore);//setScore
 	            }
+	            
 	            //첫번째 방에 들어온 사람 방장권한
 	            else if(str2.indexOf("<방장>")==0)
 	            {
@@ -77,11 +82,11 @@ public class ClientThread extends Thread {
 	            else if(str2.indexOf("@@방장")==0)
 	            {
 	            	
-//	            	client.updateName(nl.get(0));
 	            	client.updateName(str2.substring(4)+nl.get(0));
 	            	client.settingRight();
 	            	
 	            }
+	            
 	            //방장권한 바뀐 후에 리스트 이름 갱신
 	            else if(str2.indexOf("@@up")==0)
 	            {
@@ -105,6 +110,7 @@ public class ClientThread extends Thread {
 	            	System.out.println(tmp);
 	            	client.answer(tmp);//answer
 	            }
+	            
 	            //점수맞췄을 때 점수추가하기...
 	            else if(str2.indexOf("@등수")==0)
 	            {
@@ -113,6 +119,7 @@ public class ClientThread extends Thread {
 	            	String n1=temp[0];
 	            	int score=Integer.parseInt(temp[1]);
 	            	client.addScore(n1, score);
+	            	myScore+=score;
 	            	
 	            	
 	            }
@@ -154,8 +161,10 @@ public class ClientThread extends Thread {
 	            				client.deleteName(client.nameList.get(j));
 	            				}
 	            		else{
-	            			if((client.nameList.get(j).equals(str3)))
+	            			if((client.nameList.get(j).equals(str3))){
 	            					client.deleteName(client.nameList.get(j));
+	            					client.removeRank(client.nameList.get(j));
+	            			}
 	            		}
 					}
 	
