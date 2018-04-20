@@ -12,7 +12,6 @@ public class CanvasDemo extends Canvas {
 	
 		public void update(Graphics g) {
 			paint(g);
-		
 		}
 	
 		public void paint(Graphics g) {

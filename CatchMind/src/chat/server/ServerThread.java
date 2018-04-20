@@ -132,7 +132,7 @@ public class ServerThread extends Thread{
 			catch(IOException e){//catch.. 
 				server.removeThread(this);
 				server.deleteNameVector(name);
-				server.broadCasting("나감"+name);  
+				server.broadCasting("/나감"+name+","+score);  
 				System.out.println("나간번호"+clientNum);
 				server.sendRight2(clientNum);
 				if(server.v.isEmpty())

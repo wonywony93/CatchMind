@@ -397,7 +397,7 @@ public class Client {
 		
 	}
 	
-	public void removeRank(String name)
+	public void removeRank(String name,int score)
 	{
 			rank.remove(name+"("+score+")Á¡");
 	}

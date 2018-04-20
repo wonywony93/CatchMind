@@ -13,8 +13,8 @@ import chat.server.Server;
 public class ClientThread extends Thread {
 
 		ArrayList<String> nl=new ArrayList<String>();
-		ArrayList<User> ul=new ArrayList<User>();
-		
+		String bang;
+		int score;
 		
 		int myScore=0;
 		int myNumber=0;
@@ -59,6 +59,7 @@ public class ClientThread extends Thread {
 	            	client.addName(name);
 	            	client.setScore(myScore);
 	            	client.addScoreNumber(name);
+	            	
 	            	nl.add(name);
 	            }
 	            
@@ -76,6 +77,9 @@ public class ClientThread extends Thread {
 	            	name=str2.substring(4);
 	            	client.addName("<방장>"+name);
 	            	client.settingRight();
+	            	
+	            	
+	            	
 	            	nl.add(str2.substring(4));
 	            }
 	            //방장이 나간 후 방장 권한 위임
@@ -83,15 +87,18 @@ public class ClientThread extends Thread {
 	            {
 	            	
 	            	client.updateName(str2.substring(4)+nl.get(0));
+	            	bang=str2.substring(4).substring(4)+nl.get(0);
 	            	client.settingRight();
-	            	
+	            	client.removeRank(bang,score);
 	            }
 	            
 	            //방장권한 바뀐 후에 리스트 이름 갱신
 	            else if(str2.indexOf("@@up")==0)
 	            {
 	            	String e=str2.substring(4);
+	            	bang=e.substring(4);
 	            	client.updateName(e);
+	            	client.removeRank(bang,score);
 	            }
 
 	            //각자의 번호 받기 
@@ -148,22 +155,29 @@ public class ClientThread extends Thread {
 	            }
 
 	            
-	            else if(str2.indexOf("나감")==0){ 
-	            	String str3=str2.substring(2);
+	            else if(str2.indexOf("/나감")==0){ 
+	            	String str3=str2.substring(3); //name,score
+	            	String[] tmp1=str3.split(",");
+	            	str3=tmp1[0];
+	            	score=Integer.parseInt(tmp1[1]);
+	            	
 	            	client.chatA.append("["+str3+"]"+"님이 퇴장하였습니다..\n");
 	            	//<방장>
 	            	for (int j = 0; j < client.nameList.size(); j++) {
 						
-	            		if((client.nameList.get(j).indexOf("<방장>")==0))
+	            		if((client.nameList.get(j).indexOf("<방장>")==0)) //방장이 나가면 두번째 사람도 나가야함..
 	            				{
 	            			String tmp=client.nameList.get(j).substring(4);
 	            			if(tmp.equals(str3))
 	            				client.deleteName(client.nameList.get(j));
+	            			
+	            				client.nameList.remove(client.nameList.get(j));
+	            				
 	            				}
 	            		else{
 	            			if((client.nameList.get(j).equals(str3))){
 	            					client.deleteName(client.nameList.get(j));
-	            					client.removeRank(client.nameList.get(j));
+	            					client.removeRank(client.nameList.get(j),score);
 	            			}
 	            		}
 					}

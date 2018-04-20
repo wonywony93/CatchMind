@@ -133,8 +133,6 @@ public class Server {
 		  }
 	  }
 	  
-	  //20180419
-	  //권한 부여하기(내번호 보내기+점수보내기)-----
 	  public void sendRight(ServerThread st) {
 		  //내번호!점수
 		  st.sendMessage("@aty"+sum);
